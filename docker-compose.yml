@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: psrental-db
+    environment:
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=Password123
+      - POSTGRES_DB=psrental
+    ports:
+      - "5432:5432"
+    volumes:
+      - psrental-data:/var/lib/postgresql
+
+volumes:
+  psrental-data:

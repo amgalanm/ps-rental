@@ -1,0 +1,7 @@
+[
+  { "PsnAccountId": 1, "Type": "WithActivation", "Status": "Active", "StartDate": "2026-09-20T12:00:00Z", "EndDate": "2026-09-30T12:00:00Z", "Price": 590 },
+  { "PsnAccountId": 3, "Type": "WithActivation", "Status": "Active", "StartDate": "2026-09-21T12:00:00Z", "EndDate": "2026-10-01T12:00:00Z", "Price": 690 },
+  { "PsnAccountId": 3, "Type": "WithoutActivation", "Status": "Active", "StartDate": "2026-09-22T12:00:00Z", "EndDate": "2026-10-02T12:00:00Z", "Price": 450 },
+  { "PsnAccountId": 5, "Type": "WithoutActivation", "Status": "Active", "StartDate": "2026-09-23T12:00:00Z", "EndDate": "2026-10-03T12:00:00Z", "Price": 290 },
+  { "PsnAccountId": 6, "Type": "WithActivation", "Status": "Completed", "StartDate": "2026-09-01T12:00:00Z", "EndDate": "2026-09-11T12:00:00Z", "Price": 450 }
+]

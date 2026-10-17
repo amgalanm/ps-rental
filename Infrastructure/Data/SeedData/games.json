@@ -1,0 +1,50 @@
+[
+  {
+    "Name": "Cyberpunk 2077",
+    "Description": "Ролевой экшен в открытом мире мегаполиса будущего.",
+    "PictureUrl": "/images/games/cyberpunk.png",
+    "Platform": "PS5",
+    "PriceWithActivation": 590,
+    "PriceWithoutActivation": 390
+  },
+  {
+    "Name": "Elden Ring",
+    "Description": "Хардкорная ролевая игра от создателей Dark Souls.",
+    "PictureUrl": "/images/games/eldenring.png",
+    "Platform": "PS5",
+    "PriceWithActivation": 690,
+    "PriceWithoutActivation": 450
+  },
+  {
+    "Name": "God of War Ragnarök",
+    "Description": "Продолжение приключений Кратоса и Атрея в скандинавских мирах.",
+    "PictureUrl": "/images/games/gowragnarok.png",
+    "Platform": "PS5",
+    "PriceWithActivation": 790,
+    "PriceWithoutActivation": 490
+  },
+  {
+    "Name": "The Last of Us Part II",
+    "Description": "Сюжетный экшен о выживании после пандемии.",
+    "PictureUrl": "/images/games/tlou2.png",
+    "Platform": "PS4",
+    "PriceWithActivation": 490,
+    "PriceWithoutActivation": 290
+  },
+  {
+    "Name": "Ghost of Tsushima",
+    "Description": "Самурайский экшен в открытом мире феодальной Японии.",
+    "PictureUrl": "/images/games/tsushima.png",
+    "Platform": "PS4",
+    "PriceWithActivation": 450,
+    "PriceWithoutActivation": 290
+  },
+  {
+    "Name": "Marvel's Spider-Man 2",
+    "Description": "Два Человека-паука против новых злодеев Нью-Йорка.",
+    "PictureUrl": "/images/games/spiderman2.png",
+    "Platform": "PS5",
+    "PriceWithActivation": 790,
+    "PriceWithoutActivation": 490
+  }
+]

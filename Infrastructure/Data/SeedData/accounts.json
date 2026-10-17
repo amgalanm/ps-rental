@@ -1,0 +1,8 @@
+[
+  { "Email": "psn.cyberpunk1@example.com", "Password": "demo-pass-1", "GameId": 1, "Status": "Active" },
+  { "Email": "psn.cyberpunk2@example.com", "Password": "demo-pass-2", "GameId": 1, "Status": "Active" },
+  { "Email": "psn.eldenring1@example.com", "Password": "demo-pass-3", "GameId": 2, "Status": "Active" },
+  { "Email": "psn.gow1@example.com", "Password": "demo-pass-4", "GameId": 3, "Status": "Inactive", "Note": "Забанен Sony" },
+  { "Email": "psn.tlou1@example.com", "Password": "demo-pass-5", "GameId": 4, "Status": "Active" },
+  { "Email": "psn.tsushima1@example.com", "Password": "demo-pass-6", "GameId": 5, "Status": "Active" }
+]
