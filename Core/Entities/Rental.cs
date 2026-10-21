@@ -9,4 +9,6 @@ public class Rental : BaseEntity
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public decimal Price { get; set; }
+    public string? AppUserId { get; set; }
+    public AppUser? AppUser { get; set; }
 }
