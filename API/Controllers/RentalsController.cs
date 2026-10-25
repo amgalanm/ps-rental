@@ -1,8 +1,10 @@
+using System.Security.Claims;
 using API.Dtos;
 using API.Mappings;
 using Core.Entities;
 using Core.Rules;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,8 +15,11 @@ namespace API.Controllers;
 public class RentalsController(StoreContext context) : ControllerBase
 {
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<RentalDto>> CreateRental(CreateRentalDto dto)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
         var game = await context.Games.FindAsync(dto.GameId);
         if (game == null) return NotFound();
 
@@ -35,7 +40,8 @@ public class RentalsController(StoreContext context) : ControllerBase
             Status = RentalStatus.Active,
             StartDate = DateTime.UtcNow,
             EndDate = DateTime.UtcNow.AddDays(10),
-            Price = price
+            Price = price,
+            AppUserId = userId
         };
 
         context.Rentals.Add(rental);
