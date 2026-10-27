@@ -68,6 +68,18 @@ public class RentalsController(StoreContext context) : ControllerBase
         return rental;
     }
 
+    [HttpGet]
+    [Authorize]
+    public async Task<ActionResult<List<RentalDto>>> GetRentals()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
+        return await context.Rentals
+            .Where(r => r.AppUserId == userId)
+            .Select(RentalMappings.ToDto)
+            .ToListAsync();
+    }
+
     [HttpPut("{id:int}/complete")]
     public async Task<ActionResult> CompleteRental(int id)
     {
