@@ -56,9 +56,13 @@ public class RentalsController(StoreContext context) : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<RentalDto>> GetRental(int id)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
         var rental = await context.Rentals
+            .Where(r => r.AppUserId == userId)
             .Where(r => r.Id == id)
             .Select(RentalMappings.ToDto)
             .FirstOrDefaultAsync();
