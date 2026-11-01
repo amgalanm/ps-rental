@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
+using Core.Entities;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,11 @@ builder.Services.AddControllers()
 
 builder.Services.AddRouting(opt => opt.LowercaseUrls = true);
 
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<AppUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<StoreContext>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -26,15 +33,22 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
+
+app.MapGroup("api").MapIdentityApi<AppUser>();
 
 try
 {
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<StoreContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     await context.Database.MigrateAsync();
-    await StoreContextSeed.SeedAsync(context);
+    await StoreContextSeed.SeedAsync(context, userManager, roleManager);
 }
 catch (Exception ex)
 {
