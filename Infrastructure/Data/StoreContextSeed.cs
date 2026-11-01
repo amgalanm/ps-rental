@@ -2,20 +2,39 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Core.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
 public static class StoreContextSeed
 {
-    public static async Task SeedAsync(StoreContext context)
+    public static async Task SeedAsync(StoreContext context,
+        UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         var options = new JsonSerializerOptions
+        {
+            Converters = { new JsonStringEnumConverter() }
+        };
+
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        }
+
+        if (await userManager.FindByEmailAsync("admin@test.com") == null)
+        {
+            var admin = new AppUser
             {
-                Converters = { new JsonStringEnumConverter() }
+                UserName = "admin@test.com",
+                Email = "admin@test.com"
             };
+
+            await userManager.CreateAsync(admin, "Admin123!");
+            await userManager.AddToRoleAsync(admin, "Admin");
+        }
 
         if (!await context.Games.AnyAsync())
         {
@@ -39,7 +58,7 @@ public static class StoreContextSeed
             var accounts = JsonSerializer.Deserialize<List<PsnAccount>>(accountsData, options);
 
             if (accounts == null) return;
-            
+
             context.PsnAccounts.AddRange(accounts);
 
             await context.SaveChangesAsync();
@@ -53,7 +72,7 @@ public static class StoreContextSeed
             var rentals = JsonSerializer.Deserialize<List<Rental>>(rentalsData, options);
 
             if (rentals == null) return;
-            
+
             context.Rentals.AddRange(rentals);
 
             await context.SaveChangesAsync();

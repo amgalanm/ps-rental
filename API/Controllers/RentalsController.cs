@@ -85,6 +85,7 @@ public class RentalsController(StoreContext context) : ControllerBase
     }
 
     [HttpPut("{id:int}/complete")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> CompleteRental(int id)
     {
         var rental = await context.Rentals.FindAsync(id);
