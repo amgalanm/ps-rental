@@ -55,6 +55,34 @@ public class RentalsController(StoreContext context) : ControllerBase
         return CreatedAtAction(nameof(GetRental), new { id = rental.Id }, rentalDto);
     }
 
+    [HttpGet("{id:int}/credentials")]
+    [Authorize]
+    public async Task<ActionResult<PsnCredentialsDto>> GetCredentials(int id)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var rental = await context.Rentals
+            .Include(r => r.PsnAccount)
+                .ThenInclude(a => a.Game)
+            .Where(r => r.AppUserId == userId)
+            .Where(r => r.Id == id)
+            .FirstOrDefaultAsync();
+
+        if (rental == null) return NotFound();
+
+        if (rental.Status != RentalStatus.Active) 
+            return Problem("Срок аренды завершен", statusCode: 409);
+
+        return new PsnCredentialsDto
+        {
+            GameName = rental.PsnAccount.Game.Name,
+            Type = rental.Type,
+            Email = rental.PsnAccount.Email,
+            Password = rental.PsnAccount.Password,
+            EndDate = rental.EndDate
+        };
+    }
+
     [HttpGet("{id:int}")]
     [Authorize]
     public async Task<ActionResult<RentalDto>> GetRental(int id)
