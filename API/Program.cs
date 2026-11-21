@@ -3,10 +3,13 @@ using Core.Entities;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+
+builder.Services.AddSingleton(new PsnPasswordEncryptor(builder.Configuration["Encryption:PsnKey"]));
 
 builder.Services.AddDbContext<StoreContext>(opt =>
 {
