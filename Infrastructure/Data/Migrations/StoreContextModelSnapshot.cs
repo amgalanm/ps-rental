@@ -188,6 +188,10 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("PsnAccountId");
 
+                    b.HasIndex("PsnAccountId", "Type")
+                        .IsUnique()
+                        .HasFilter("\"Status\" = 0");
+
                     b.ToTable("Rentals");
                 });
 

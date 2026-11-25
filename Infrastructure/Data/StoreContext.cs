@@ -23,5 +23,13 @@ public class StoreContext(DbContextOptions options,
             .HasConversion(
                 password => encryptor.Encrypt(password),
                 encrypted => encryptor.Decrypt(encrypted));
+
+        builder.Entity<Rental>()
+            .HasIndex(r => new { r.PsnAccountId, r.Type })
+            .IsUnique()
+            .HasFilter($"\"Status\" = {(int)RentalStatus.Active}");
+
+        builder.Entity<Rental>()
+            .HasIndex(r => r.PsnAccountId);
     }
 }
