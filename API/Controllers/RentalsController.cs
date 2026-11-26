@@ -23,12 +23,14 @@ public class RentalsController(StoreContext context) : ControllerBase
         var game = await context.Games.FindAsync(dto.GameId);
         if (game == null) return NotFound();
 
+        var noFreeSlotMessage = $"Нет свободных аккаунтов для {game.Name} ({dto.Type})";
+
         var account = await context.PsnAccounts
             .Where(a => a.GameId == game.Id)
             .Where(AccountRules.HasFreeSlot(dto.Type))
             .FirstOrDefaultAsync();
 
-        if (account == null) return Problem("Нет свободных аккаунтов", statusCode: 400);
+        if (account == null) return Problem(noFreeSlotMessage, statusCode: 409);
 
         var price = dto.Type == RentalType.WithActivation
             ? game.PriceWithActivation : game.PriceWithoutActivation;
@@ -45,7 +47,15 @@ public class RentalsController(StoreContext context) : ControllerBase
         };
 
         context.Rentals.Add(rental);
-        await context.SaveChangesAsync();
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
+        {
+            return Problem(noFreeSlotMessage, statusCode: 409);
+        }
 
         var rentalDto = await context.Rentals
             .Where(r => r.Id == rental.Id)
@@ -70,7 +80,7 @@ public class RentalsController(StoreContext context) : ControllerBase
 
         if (rental == null) return NotFound();
 
-        if (rental.Status != RentalStatus.Active) 
+        if (rental.Status != RentalStatus.Active)
             return Problem("Срок аренды завершен", statusCode: 409);
 
         return new PsnCredentialsDto
@@ -88,7 +98,7 @@ public class RentalsController(StoreContext context) : ControllerBase
     public async Task<ActionResult<RentalDto>> GetRental(int id)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        
+
         var rental = await context.Rentals
             .Where(r => r.AppUserId == userId)
             .Where(r => r.Id == id)
@@ -105,7 +115,7 @@ public class RentalsController(StoreContext context) : ControllerBase
     public async Task<ActionResult<List<RentalDto>>> GetRentals()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        
+
         return await context.Rentals
             .Where(r => r.AppUserId == userId)
             .Select(RentalMappings.ToDto)
@@ -120,9 +130,9 @@ public class RentalsController(StoreContext context) : ControllerBase
 
         if (rental == null) return NotFound();
 
-        if (rental.Status != RentalStatus.Active) 
+        if (rental.Status != RentalStatus.Active)
             return Problem("Аренда уже завершена", statusCode: 400);
-        
+
         rental.Status = RentalStatus.Completed;
 
         await context.SaveChangesAsync();
