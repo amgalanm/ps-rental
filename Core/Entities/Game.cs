@@ -9,4 +9,5 @@ public class Game : BaseEntity
     public decimal PriceWithActivation { get; set; }
     public decimal PriceWithoutActivation { get; set; }
     public ICollection<PsnAccount> PsnAccounts { get; set; } = [];
+    public bool IsArchived { get; set; }
 }
