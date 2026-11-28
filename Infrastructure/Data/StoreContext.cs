@@ -31,5 +31,17 @@ public class StoreContext(DbContextOptions options,
 
         builder.Entity<Rental>()
             .HasIndex(r => r.PsnAccountId);
+
+        builder.Entity<PsnAccount>()
+            .HasOne(a => a.Game)
+            .WithMany(g => g.PsnAccounts)
+            .HasForeignKey(a => a.GameId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<Rental>()
+            .HasOne(r => r.PsnAccount)
+            .WithMany(a => a.Rentals)
+            .HasForeignKey(r => r.PsnAccountId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

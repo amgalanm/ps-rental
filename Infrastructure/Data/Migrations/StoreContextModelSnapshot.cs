@@ -100,6 +100,9 @@ namespace Infrastructure.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -332,7 +335,7 @@ namespace Infrastructure.Data.Migrations
                     b.HasOne("Core.Entities.Game", "Game")
                         .WithMany("PsnAccounts")
                         .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Game");
@@ -347,7 +350,7 @@ namespace Infrastructure.Data.Migrations
                     b.HasOne("Core.Entities.PsnAccount", "PsnAccount")
                         .WithMany("Rentals")
                         .HasForeignKey("PsnAccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AppUser");
