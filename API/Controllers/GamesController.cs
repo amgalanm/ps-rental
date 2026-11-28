@@ -15,6 +15,7 @@ public class GamesController(StoreContext context) : ControllerBase
     {
         var game = await context.Games
             .Where(g => g.Id == id)
+            .Where(g => !g.IsArchived)
             .Select(GameMappings.ToDto)
             .FirstOrDefaultAsync();
 
@@ -27,6 +28,7 @@ public class GamesController(StoreContext context) : ControllerBase
     public async Task<ActionResult<List<GameDto>>> GetGames()
     {
         return await context.Games
+            .Where(g => !g.IsArchived)
             .Select(GameMappings.ToDto)
             .ToListAsync();
     }

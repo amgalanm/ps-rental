@@ -21,7 +21,7 @@ public class RentalsController(StoreContext context) : ControllerBase
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         var game = await context.Games.FindAsync(dto.GameId);
-        if (game == null) return NotFound();
+        if (game == null || game.IsArchived) return NotFound();
 
         var noFreeSlotMessage = $"Нет свободных аккаунтов для {game.Name} ({dto.Type})";
 
